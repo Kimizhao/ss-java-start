@@ -69,6 +69,16 @@ public class HBaseUtils2Test {
     }
 
     @Test
+    public void getRow() {
+        Result result = HBaseUtils.getRow(TABLE_NAME, "bfda83ae54e8d551h01aygtest00000039223370416045374640");
+        if (result != null) {
+            System.out.println(Bytes
+                    .toString(result.getValue(Bytes.toBytes(ORIGNAL), Bytes.toBytes("vin"))));
+        }
+
+    }
+
+    @Test
     public void getCell() {
         String cell = HBaseUtils.getCell(TABLE_NAME, "bfda83ae54e8d551h01aygtest00000039223370416045374640", ORIGNAL, "msgid");
         System.out.println("cell age :" + cell);
