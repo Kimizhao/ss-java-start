@@ -15,6 +15,7 @@ import java.util.Properties;
 public class ConsumerASyn {
 
     public static void main(String[] args) {
+        //String t = "AbcDef";
         String topic = "Hello-Kafka";
         String group = "group1";
         Properties props = new Properties();

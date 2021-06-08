@@ -21,7 +21,6 @@ import java.util.Properties;
 public class GB17691MessageSinkToHBase {
     private static final String TABLE_NAME = "gb17691_message";
     private static final String ORIGNAL = "o";
-    private static final String DESERIALIZE = "d";
 
     public static void main(String[] args) {
         String topic = "gb17691_message";
@@ -41,13 +40,16 @@ public class GB17691MessageSinkToHBase {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.of(100, ChronoUnit.MILLIS));
                 for (ConsumerRecord<String, String> record : records) {
                     //System.out.println(record);
-                    System.out.printf("topic = %s,partition = %d, key = %s, value = %s, offset = %d,\n",
-                            record.topic(), record.partition(), record.key(), record.value(), record.offset());
+                    //System.out.printf("topic = %s,partition = %d, key = %s, value = %s, offset = %d,\n",
+                    //        record.topic(), record.partition(), record.key(), record.value(), record.offset());
 
                     //String vin = "h01aygtest0000003";
                     byte msgid = Bytes.toBytes(record.value())[2];
+                    //byte[] a = Bytes.toBytes(record.key());
+                    byte[] b = new byte[] { msgid };
+                    //byte[] c = Bytes.toBytes(record.value());
                     List<Pair<byte[], byte[]>> pairs1 = Arrays.asList(new Pair<>(Bytes.toBytes("vin"), Bytes.toBytes(record.key())),
-                            new Pair<>(Bytes.toBytes("msgid"), Bytes.toBytes(msgid)),
+                            new Pair<>(Bytes.toBytes("msg_id"), b),
                             new Pair<>(Bytes.toBytes("data"), Bytes.toBytes(record.value())));
 
                     HBaseUtils.putRow2(TABLE_NAME, Utils.generateRowKey2(record.key()), ORIGNAL, pairs1);

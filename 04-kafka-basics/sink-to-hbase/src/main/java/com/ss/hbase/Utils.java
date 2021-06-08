@@ -29,11 +29,24 @@ public class Utils {
         long timeStamp = System.currentTimeMillis();
         long reverseTimeStamp = Long.MAX_VALUE - timeStamp;
 
-        System.out.println("timeStamp=" + timeStamp);
-        System.out.println("reverseTimeStamp=" + reverseTimeStamp);
+        //System.out.println("timeStamp=" + timeStamp);
+        //System.out.println("reverseTimeStamp=" + reverseTimeStamp);
 
         String idMD5 = SecureUtil.md5(id);
-        System.out.println("idMD5=" + idMD5);
+        //System.out.println("idMD5=" + idMD5);
+
+        //return idMD5.substring(0, 16) + id.toLowerCase() + reverseTimeStamp;
+        return idMD5.substring(0, 4) + id.toLowerCase() + reverseTimeStamp;
+    }
+
+    public static String generateRowKey3(String id, long timeStamp) {
+        long reverseTimeStamp = Long.MAX_VALUE - timeStamp;
+
+        //System.out.println("timeStamp=" + timeStamp);
+        //System.out.println("reverseTimeStamp=" + reverseTimeStamp);
+
+        String idMD5 = SecureUtil.md5(id);
+        //System.out.println("idMD5=" + idMD5);
 
         return idMD5.substring(0, 16) + id.toLowerCase() + reverseTimeStamp;
     }

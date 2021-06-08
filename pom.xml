@@ -6,6 +6,8 @@
     <modules>
         <module>04-kafka-basics</module>
         <module>00-util</module>
+        <module>fastjson-demo</module>
+        <module>kafka-streams-demo</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
