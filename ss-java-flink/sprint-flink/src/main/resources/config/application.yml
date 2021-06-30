@@ -1,0 +1,29 @@
+spring:
+  jackson:
+    time-zone: GMT+8
+  data:
+    redis:
+      repositories:
+        enabled: false
+    mongodb:
+      uri: mongodb://192.168.10.100:27017/yg_bd_kbox
+
+  redis:
+    #数据库索引
+    database: ${REDIS_DB:2}
+    host: ${REDIS_HOST:192.168.10.100}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PWD:}
+    #连接超时时间
+    timeout: 5000
+
+task:
+  pool:
+    # 核心线程池大小
+    core-pool-size: 10
+    # 最大线程数
+    max-pool-size: 30
+    # 活跃时间
+    keep-alive-seconds: 60
+    # 队列容量
+    queue-capacity: 50
