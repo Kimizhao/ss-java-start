@@ -1,7 +1,9 @@
-package com.ss;
+package com.ss.com.ss.apptest;
 
 import com.alibaba.fastjson.JSON;
+import com.ss.FlinkStreamKafka2;
 import com.ss.model.Gb32960Track;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichFilterFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -17,9 +19,10 @@ import org.apache.flink.streaming.connectors.redis.common.mapper.RedisMapper;
 import java.util.Properties;
 
 /**
- * Created by zhaozh on 2021/06/17.
+ * Created by zhaozh on 2021/07/01.
  */
-public class FlinkStreamKafka2 {
+@Slf4j
+public class VehicleTest1_Redis {
     public static void main(String[] args) throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -29,7 +32,7 @@ public class FlinkStreamKafka2 {
         properties.setProperty("bootstrap.servers", "hadoop001:9092");
 
         // 指定监听的主题，并定义Kafka字节消息到Flink对象之间的转换规则
-        properties.setProperty("group.id", "test");
+        //properties.setProperty("group.id", "test");
 
         DataStream<Gb32960Track> dataStream = env
                 .addSource(new FlinkKafkaConsumer<>("gb32960_track", new SimpleStringSchema(), properties))
@@ -39,9 +42,10 @@ public class FlinkStreamKafka2 {
         // Jedis 配置
         FlinkJedisPoolConfig config = new FlinkJedisPoolConfig.Builder().setHost("hadoop001").setPort(6379).build();
         dataStream.addSink(new RedisSink<>(config, new MyRedisMapper()));
-        //dataStream.print();
 
-        env.execute("Flink Streaming");
+        //dataStream.print("Vehicle data");
+
+        env.execute("Vehicle data sink to redis.");
 
     }
 
@@ -60,8 +64,7 @@ public class FlinkStreamKafka2 {
         public boolean filter(Gb32960Track gb32960Track) throws Exception {
             if (gb32960Track.getVin() != null) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -84,6 +87,4 @@ public class FlinkStreamKafka2 {
             return gb32960Track.getData();
         }
     }
-
-
 }

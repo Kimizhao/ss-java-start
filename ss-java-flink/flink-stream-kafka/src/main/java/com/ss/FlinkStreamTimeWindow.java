@@ -47,14 +47,14 @@ public class FlinkStreamTimeWindow {
                 }).filter(new RichFilterFunction<Gb32960Track>() {
                     @Override
                     public boolean filter(Gb32960Track gb32960Track) throws Exception {
-                        if (gb32960Track.vin != null) {
+                        if (gb32960Track.getVin() != null) {
                             return true;
                         }
                         else {
                             return false;
                         }
                     }
-                }).keyBy(gb32960Track -> gb32960Track.vin);
+                }).keyBy(gb32960Track -> gb32960Track.getVin());
 
         stream.print();
 
@@ -62,7 +62,7 @@ public class FlinkStreamTimeWindow {
                 .flatMap(new FlatMapFunction<Gb32960Track, Tuple2<String, Long>>() {
                     @Override
                     public void flatMap(Gb32960Track gb32960Track, Collector<Tuple2<String,Long>> collector) throws Exception {
-                        collector.collect(new Tuple2<String, Long>(gb32960Track.vin, gb32960Track.gpsTime.getTime()));
+                        collector.collect(new Tuple2<String, Long>(gb32960Track.getVin(), gb32960Track.getGpsTime().getTime()));
                     }
                 })
                 .keyBy(stringDateTuple2 -> stringDateTuple2.f0).countWindow(3).reduce(new ReduceFunction<Tuple2<String, Long>>() {

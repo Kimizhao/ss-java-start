@@ -47,7 +47,7 @@ public class FlinkStreamWindow {
                 }).filter(new RichFilterFunction<Gb32960Track>() {
                     @Override
                     public boolean filter(Gb32960Track gb32960Track) throws Exception {
-                        if (gb32960Track.vin != null) {
+                        if (gb32960Track.getVin() != null) {
                             return true;
                         }
                         else {
@@ -59,11 +59,11 @@ public class FlinkStreamWindow {
         //stream.print();
 
         DataStream<Tuple2<String, Integer>> stream1 =  stream
-                .keyBy(gb32960Track -> gb32960Track.vin)
+                .keyBy(gb32960Track -> gb32960Track.getVin())
                 .flatMap(new FlatMapFunction<Gb32960Track, Tuple2<String, Integer>>() {
                     @Override
                     public void flatMap(Gb32960Track gb32960Track, Collector<Tuple2<String, Integer>> collector) throws Exception {
-                        collector.collect(new Tuple2<String, Integer>(gb32960Track.vin, 1));
+                        collector.collect(new Tuple2<String, Integer>(gb32960Track.getVin(), 1));
                     }
                 });
 

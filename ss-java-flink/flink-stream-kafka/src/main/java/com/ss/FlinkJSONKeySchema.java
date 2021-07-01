@@ -19,6 +19,7 @@ public class FlinkJSONKeySchema {
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("auto.offset.reset", "latest");
+
         // 指定Kafka的连接位置
         properties.setProperty("bootstrap.servers", "hadoop001:9092");
 
@@ -26,14 +27,12 @@ public class FlinkJSONKeySchema {
         properties.setProperty("group.id", "test");
 
         try {
+            DataStream<ObjectNode> stream = env
+                    .addSource(new FlinkKafkaConsumer<>("flink-stream-in-topic", new JSONKeyValueDeserializationSchema(true), properties));
 
+            stream.print();
 
-        DataStream<ObjectNode> stream = env
-                .addSource(new FlinkKafkaConsumer<>("flink-stream-in-topic", new JSONKeyValueDeserializationSchema(true), properties));
-
-        stream.print();
-
-        env.execute("Flink Streaming");
+            env.execute("Flink Streaming");
         } catch (Exception e) {
             e.printStackTrace();
         }
